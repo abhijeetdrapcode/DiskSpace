@@ -7,12 +7,11 @@ sudo apt update && sudo apt install -y mailutils postfix libsasl2-modules
 echo "Updating Postfix configuration..."
 POSTFIX_MAIN_CF="/etc/postfix/main.cf"
 sudo chmod 777 $POSTFIX_MAIN_CF
-sudo sed -i '/^relayhost =/d' $POSTFIX_MAIN_CF
-sudo sed -i '/^smtp_sasl_password_maps =/d' $POSTFIX_MAIN_CF
-sudo sed -i '/^smtp_sasl_auth_enable =/d' $POSTFIX_MAIN_CF
-sudo sed -i '/^smtp_tls_security_level =/d' $POSTFIX_MAIN_CF
-sudo sed -i '/^smtp_sasl_security_options =/d' $POSTFIX_MAIN_CF
 
+# Remove all occurrences of smtp_tls_security_level
+sudo sed -i '/^smtp_tls_security_level =/d' $POSTFIX_MAIN_CF
+
+# Add necessary configuration
 cat <<EOL | sudo tee -a $POSTFIX_MAIN_CF
 relayhost = [smtp.gmail.com]:587
 smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
